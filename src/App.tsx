@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
+import { getEnglishFlavorText } from './utils';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [pokemon, setPokemon] = useState({
+    name: '',
+    entry: '',
+    image: '',
+  });
+
+  useEffect(() => {
+    const fetchPokemonData = async () => {
+      setPokemon({ name: '', entry: '', image: '' });
+      try {
+        const randomId = Math.floor(Math.random() * 151) + 1;
+        const speciesResponse = await fetch(
+          `https://pokeapi.co/api/v2/pokemon-species/${randomId}`
+        );
+        const speciesData = await speciesResponse.json();
+        const imageResponse = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${randomId}`
+        );
+        const imageData = await imageResponse.json();
+
+        setPokemon({
+          name:
+            speciesData.name.charAt(0).toUpperCase() +
+            speciesData.name.slice(1),
+          entry: getEnglishFlavorText(speciesData.flavor_text_entries),
+          image: imageData.sprites.front_default,
+        });
+      } catch (error) {
+        console.error(error);
+        setPokemon({
+          name: 'Unknown',
+          entry: 'Failed to load Pokedex entry.',
+          image: '',
+        });
+      }
+    };
+    fetchPokemonData();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>
+        Fun fact about: <strong>{pokemon.name}!</strong>
+      </h1>
+      <h2>{pokemon.entry}</h2>
+      {pokemon.image && (
+        <img
+          src={pokemon.image}
+          alt={pokemon.name}
+          style={{ width: '300px', height: '300px' }}
+        />
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

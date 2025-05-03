@@ -26,3 +26,10 @@ npm run dev
 
 This will start a local development server of the project. You can view the application at `http://localhost:5173/`.
 
+---
+
+### Stage 2 - Pokemon Fun Facts
+
+In this stage, we have replaced the template website with a simple application that displays fun facts about Pokemon. The application fetches it's data from [PokeApi](https://pokeapi.co/).
+
+Your task in this stage is to turn this app into a guessing game - The user will be presented with a random fact about a Pokemon that might be true or false. The user will have to guess if the fact is true or false. In order to generate faulty facts, you will need to integrate your application with [OpenAI API](https://platform.openai.com/docs/api-reference/chat/create).
