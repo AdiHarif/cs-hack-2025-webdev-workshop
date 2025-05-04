@@ -42,17 +42,12 @@ In this stage, we are going to integrate with some LLMs. Take the real Pokemon f
 ---
 
 ### Your turn!
-### Stage 4 – Two-Player Offline Mode
-Introduce a local 2-player mode so two people can take turns guessing on the same device.
+Coding time! After completing stage 3, it's your turn to pick how to contuine to develop the game. You can choose any of those extra features to implement, as you wish - or, you can try to catch them all :)
+Good luck!
 
-### Stage 5 – Turn Limit
-Add a configurable “X turns” limit per game and display remaining turns in the UI.
-
-### Stage 6 – Time-Based Scoring
-Record time per guess and calculate score so faster answers earn more points.
-
-### Stage 7 – Level System
-Implement difficulty levels that adjust AI persuasiveness (משכנע יותר או פחות).
-
-### Stage 8 – Category Modes
-Enable multiple categories by integrating different news-site APIs for varied fact sources.
+| Feature                    | Example LLM Prompt                                                                                   | Tip                                                            |
+|:---------------------------|:-----------------------------------------------------------------------------------------------------|:---------------------------------------------------------------|
+| Two-Player Offline Mode    | “Generate a React hook and component that alternates turns between Player 1 and Player 2 on the same device.” | Use a `currentPlayer` state and toggle it after each guess.     |
+| Turn Limit                 | “Create a configurable turn-counter component in React that decrements from X and shows remaining turns.” | Pass `maxTurns` as a prop and disable inputs when it hits 0.    |
+| Time-Based Scoring         | “Write a function to record time taken for each guess and compute `score = maxTime – elapsedSeconds`.”   | Capture `startTime` on question render and `endTime` on answer. |
+| Level System               | “Show how to adjust OpenAI API parameters (e.g. temperature) based on selected difficulty level.”       | Map levels ↔ temperature (e.g. easy 0.3, hard 0.8).             |
