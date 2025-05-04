@@ -8,11 +8,9 @@ function App() {
     entry: '',
     image: '',
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPokemonData = async () => {
-      setLoading(true); // Start loading and clear previous data
       setPokemon({ name: '', entry: '', image: '' });
       try {
         const randomId = Math.floor(Math.random() * 151) + 1;
@@ -32,14 +30,13 @@ function App() {
           entry: getEnglishFlavorText(speciesData.flavor_text_entries),
           image: imageData.sprites.front_default,
         });
-      } catch {
+      } catch (error) {
+        console.error(error);
         setPokemon({
           name: 'Unknown',
           entry: 'Failed to load Pokedex entry.',
           image: '',
         });
-      } finally {
-        setLoading(false);
       }
     };
     fetchPokemonData();
@@ -47,22 +44,16 @@ function App() {
 
   return (
     <>
-      {loading ? (
-        <h2>Loading...</h2>
-      ) : (
-        <>
-          <h1>
-            Fun fact about: <strong>{pokemon.name}!</strong>
-          </h1>
-          <h2>{pokemon.entry}</h2>
-          {pokemon.image && (
-            <img
-              src={pokemon.image}
-              alt={pokemon.name}
-              style={{ width: '300px', height: '300px' }}
-            />
-          )}
-        </>
+      <h1>
+        Fun fact about: <strong>{pokemon.name}!</strong>
+      </h1>
+      <h2>{pokemon.entry}</h2>
+      {pokemon.image && (
+        <img
+          src={pokemon.image}
+          alt={pokemon.name}
+          style={{ width: '300px', height: '300px' }}
+        />
       )}
     </>
   );
