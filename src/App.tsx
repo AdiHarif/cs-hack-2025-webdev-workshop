@@ -1,38 +1,45 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import { getEnglishFlavorText } from './utils';
 
 function App() {
-  const [pokedexEntry, setPokedexEntry] = useState<string>('Loading...');
-  const [pokemonName, setPokemonName] = useState<string>('');
-  const [pokemonImage, setPokemonImage] = useState<string>('');
+  const [pokemon, setPokemon] = useState({
+    name: '',
+    entry: '',
+    image: '',
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPokemonData = async () => {
+      setLoading(true); // Start loading and clear previous data
+      setPokemon({ name: '', entry: '', image: '' });
       try {
         const randomId = Math.floor(Math.random() * 151) + 1;
         const speciesResponse = await fetch(
           `https://pokeapi.co/api/v2/pokemon-species/${randomId}`
         );
         const speciesData = await speciesResponse.json();
-        const capitalizedName =
-          speciesData.name.charAt(0).toUpperCase() + speciesData.name.slice(1);
-        setPokemonName(capitalizedName);
-        setPokedexEntry(
-          speciesData.flavor_text_entries
-            .find((entry: any) => entry.language.name === 'en')
-            .flavor_text.replace(/\s+/g, ' ')
-        );
-
-        // Fetch Pokémon image
         const imageResponse = await fetch(
           `https://pokeapi.co/api/v2/pokemon/${randomId}`
         );
         const imageData = await imageResponse.json();
-        setPokemonImage(imageData.sprites.front_default);
-      } catch (error) {
-        setPokemonName('Unknown');
-        setPokedexEntry('Failed to load Pokedex entry.');
-        setPokemonImage('');
+
+        setPokemon({
+          name:
+            speciesData.name.charAt(0).toUpperCase() +
+            speciesData.name.slice(1),
+          entry: getEnglishFlavorText(speciesData.flavor_text_entries),
+          image: imageData.sprites.front_default,
+        });
+      } catch {
+        setPokemon({
+          name: 'Unknown',
+          entry: 'Failed to load Pokedex entry.',
+          image: '',
+        });
+      } finally {
+        setLoading(false);
       }
     };
     fetchPokemonData();
@@ -40,16 +47,22 @@ function App() {
 
   return (
     <>
-      <h1>
-        Fun fact about: <strong>{pokemonName}!</strong>
-      </h1>
-      <h2>{pokedexEntry}</h2>
-      {pokemonImage && (
-        <img
-          src={pokemonImage}
-          alt={pokemonName}
-          style={{ width: '300px', height: '300px' }}
-        />
+      {loading ? (
+        <h2>Loading...</h2>
+      ) : (
+        <>
+          <h1>
+            Fun fact about: <strong>{pokemon.name}!</strong>
+          </h1>
+          <h2>{pokemon.entry}</h2>
+          {pokemon.image && (
+            <img
+              src={pokemon.image}
+              alt={pokemon.name}
+              style={{ width: '300px', height: '300px' }}
+            />
+          )}
+        </>
       )}
     </>
   );
