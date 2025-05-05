@@ -3,8 +3,7 @@ import './App.css';
 import { getEnglishFlavorText } from './utils';
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_KEY =
-  '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'!;
+const OPENROUTER_KEY = 'adi-harif-is-the-man'!;
 
 async function generateFakeEntry(
   pokemonName: string,
@@ -51,7 +50,6 @@ function App() {
     image: '',
     types: [],
   });
-  const [fakeEntry, setFakeEntry] = useState<string>('');
   const [isFake, setIsFake] = useState<boolean>(false);
   const [displayedEntry, setDisplayedEntry] = useState<string>('');
   const [userGuess, setUserGuess] = useState<'fake' | 'true' | null>(null);
@@ -63,7 +61,6 @@ function App() {
     setFeedback('');
     setDisplayedEntry('');
     setPokemon({ name: '', entry: '', image: '', types: [] });
-    setFakeEntry('');
 
     try {
       // 1. fetch a random Pokémon
@@ -87,7 +84,6 @@ function App() {
 
       // 2. generate the fake version
       const fake = await generateFakeEntry(name, types, real);
-      setFakeEntry(fake);
 
       // 3. pick which one to show
       // This is a true 50-50 coin flip
